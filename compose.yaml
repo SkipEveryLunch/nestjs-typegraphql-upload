@@ -1,0 +1,27 @@
+version: '3.9'
+
+services:
+  server:
+    build:
+      dockerfile: Dockerfile
+    volumes:
+      - ./:/home/node/app
+    ports:
+      - 3000:3000
+      - 5555:5555
+    environment:
+      - NODE_ENV=development
+    depends_on:
+      - db
+  db:
+    image: postgres:14.1
+    restart: always
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: test
+      POSTGRES_PASSWORD: test
+      POSTGRES_DB: test
+    volumes:
+      - ./db/postgres:/var/lib/postgresql/data
+      - ./db/logs:/var/log
