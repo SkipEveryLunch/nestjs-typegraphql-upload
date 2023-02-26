@@ -1,7 +1,9 @@
-import { Module } from "@nestjs/common";
+import { MiddlewareConsumer, Module } from "@nestjs/common";
 import { TypeGraphQLModule } from "typegraphql-nestjs";
 import {ApolloDriver} from '@nestjs/apollo'
 import { UploadModule } from './upload/upload.module';
+import { graphqlUploadExpress } from "graphql-upload-minimal";
+
 
 @Module({
   imports: [
@@ -14,4 +16,8 @@ import { UploadModule } from './upload/upload.module';
     UploadModule,
   ],
 })
-export default class AppModule {}
+export default class AppModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(graphqlUploadExpress()).forRoutes("graphql");
+  }
+}
